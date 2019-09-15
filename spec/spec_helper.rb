@@ -1,0 +1,13 @@
+require 'minitest/spec'
+require 'minitest/autorun'
+
+require 'jekyll'
+require_relative '../lib/j1-paginator/version'
+require_relative '../lib/j1-paginator/generator/defaults'
+require_relative '../lib/j1-paginator/generator/utils'
+require_relative '../lib/j1-paginator/generator/compatibilityUtils'
+require_relative '../lib/j1-paginator/generator/paginationIndexer'
+require_relative '../lib/j1-paginator/generator/paginator'
+require_relative '../lib/j1-paginator/generator/paginationPage'
+require_relative '../lib/j1-paginator/generator/paginationModel'
+require_relative '../lib/j1-paginator/generator/paginationGenerator'
