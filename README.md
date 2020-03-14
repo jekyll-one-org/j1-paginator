@@ -2,13 +2,7 @@
 
 Pagination gem built specially for Jekyll 3 and newer that is fully backwards compatible and serves as an enhanced replacement for the previously built-in [jekyll-paginate gem](https://github.com/jekyll/jekyll-paginate). View it on [rubygems.org](https://rubygems.org/gems/j1-paginator).
 
-[![Code Shelter](https://www.codeshelter.co/static/badges/badge-flat.svg)](https://www.codeshelter.co/)
 [![Gem](https://img.shields.io/gem/v/j1-paginator.svg)](https://rubygems.org/gems/j1-paginator)
-[![Join the chat at https://gitter.im/j1-paginator/Lobby](https://badges.gitter.im/j1-paginator/Lobby.svg)](https://gitter.im/j1-paginator/Lobby)
-[![Build Status](https://travis-ci.org/sverrirs/j1-paginator.svg?branch=master)](https://travis-ci.org/sverrirs/j1-paginator) 
-[![Code Climate](https://codeclimate.com/github/sverrirs/j1-paginator/badges/gpa.svg)](https://codeclimate.com/github/sverrirs/j1-paginator)
-[![security](https://hakiri.io/github/sverrirs/j1-paginator/master.svg)](https://hakiri.io/github/sverrirs/j1-paginator/master)
-[![Gem](https://img.shields.io/gem/dt/j1-paginator.svg)](https://rubygems.org/gems/j1-paginator)
 
 Reach me at the [project issues](https://github.com/sverrirs/j1-paginator/issues) section or via email at [jekyll@sverrirs.com](mailto:jekyll@sverrirs.com), you can also get in touch on the project's [Gitter chat room](https://gitter.im/j1-paginator/Lobby).
 
