@@ -4,8 +4,6 @@ Pagination gem built specially for Jekyll 3 and newer that is fully backwards co
 
 [![Gem](https://img.shields.io/gem/v/j1-paginator.svg)](https://rubygems.org/gems/j1-paginator)
 
-Reach me at the [project issues](https://github.com/sverrirs/j1-paginator/issues) section or via email at [jekyll@sverrirs.com](mailto:jekyll@sverrirs.com), you can also get in touch on the project's [Gitter chat room](https://gitter.im/j1-paginator/Lobby).
-
 > The code was based on the original design of [jekyll-paginate](https://github.com/jekyll/jekyll-paginate) and features were sourced from discussions such as [#27](https://github.com/jekyll/jekyll-paginate/issues/27) (thanks [Günter Kits](https://github.com/gynter)).
 
 * [Installation](#installation)
