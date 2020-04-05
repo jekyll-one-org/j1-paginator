@@ -12,7 +12,7 @@ module Jekyll
 
       # If disabled then don't do anything
       if !autopage_config['enabled'] || autopage_config['enabled'].nil?
-        Jekyll.logger.info "AutoPages:","Disabled/Not configured in site.config."
+        Jekyll.logger.info "AutoPages:","Disabled/Not configured in site.config"
         return
       end
 
@@ -68,7 +68,7 @@ module Jekyll
             end
           end
         else
-          Jekyll.logger.info "AutoPages:","#{configkey_name} pages are disabled/not configured in site.config."
+          Jekyll.logger.info "AutoPages:","#{configkey_name} pages are disabled/not configured in site.config"
         end
       end
     end
