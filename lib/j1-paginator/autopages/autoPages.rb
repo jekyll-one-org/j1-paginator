@@ -7,12 +7,21 @@ module Jekyll
     def self.create_autopages(site)
 
       # Get the configuration for the auto pages
-      autopage_config = Jekyll::Utils.deep_merge_hashes(DEFAULT, site.config['autopages'] || {})
-      pagination_config = Jekyll::Utils.deep_merge_hashes(Jekyll::J1Paginator::Generator::DEFAULT, site.config['pagination'] || {})
+      ap_config_defaults = site.data['plugins']['defaults']['autopages']['settings']
+      ap_config_settings = site.data['plugins']['autopages']['settings']
+      ap_settings = Jekyll::Utils.deep_merge_hashes(ap_config_defaults, ap_config_settings || {})
+      autopage_config = ap_settings
+#     autopage_config = Jekyll::Utils.deep_merge_hashes(DEFAULT, site.config['autopages'] || {})
+
+      pg_config_defaults = site.data['plugins']['defaults']['paginator']['settings']
+      pg_config_settings = site.data['plugins']['paginator']['settings']
+      pg_settings = Jekyll::Utils.deep_merge_hashes(pg_config_defaults, pg_config_settings || {})
+      pagination_config = pg_settings
+#     pagination_config = Jekyll::Utils.deep_merge_hashes(Jekyll::J1Paginator::Generator::DEFAULT, site.config['pagination'] || {})
 
       # If disabled then don't do anything
       if !autopage_config['enabled'] || autopage_config['enabled'].nil?
-        Jekyll.logger.info "AutoPages:","Disabled/Not configured in site.config"
+        Jekyll.logger.info "J1 Paginator:","AutoPages: Disabled/Not configured in site.config"
         return
       end
 
@@ -55,7 +64,7 @@ module Jekyll
       if !autopage_config[configkey_name].nil?
         ap_sub_config = autopage_config[configkey_name]
         if ap_sub_config ['enabled']
-          Jekyll.logger.info "AutoPages:","Generating #{configkey_name} pages"
+          Jekyll.logger.info "J1 Paginator:","AutoPages: Generating #{configkey_name} pages"
 
           # Roll through all documents in the posts collection and extract the tags
           index_keys = Utils.ap_index_posts_by(posts_to_use, indexkey_name) # Cannot use just the posts here, must use all things.. posts, collections...
@@ -68,7 +77,7 @@ module Jekyll
             end
           end
         else
-          Jekyll.logger.info "AutoPages:","#{configkey_name} pages are disabled/not configured in site.config"
+          Jekyll.logger.info "J1 Paginator:","AutoPages: #{configkey_name} pages are disabled/not configured in site.config"
         end
       end
     end
