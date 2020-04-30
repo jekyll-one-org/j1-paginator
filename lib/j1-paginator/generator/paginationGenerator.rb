@@ -19,50 +19,41 @@ module Jekyll
       #
       # Returns nothing.
       def generate(site)
-      #begin
-        # Generate the AutoPages first
-        J1Paginator::AutoPages.create_autopages(site)
 
-        # Retrieve and merge the pagination configuration from the site yml file
-        # default_config = Jekyll::Utils.deep_merge_hashes(DEFAULT, site.config['pagination'] || {})
-        pg_config_defaults = site.data['plugins']['defaults']['paginator']['settings']
-        pg_config_settings = site.data['plugins']['paginator']['settings']
+        # Retrieve and merge the pagination configuration from the plugin yml file
+        pg_config_defaults = site.data['plugins']['defaults']['paginator']
+        pg_config_settings = site.data['plugins']['paginator']
         pg_settings = Jekyll::Utils.deep_merge_hashes(pg_config_defaults, pg_config_settings || {})
-        default_config = pg_settings
 
-        # Compatibility Note: (REMOVE AFTER 2018-01-01)
-        # If the legacy paginate logic is configured then read those values and merge with config
+        # Merge the pagination configuration by the site default settings
+        # default_config = Jekyll::Utils.deep_merge_hashes(DEFAULT, site.config['pagination'] || {})#
+        default_config = Jekyll::Utils.deep_merge_hashes(DEFAULT, pg_settings['settings']['pagination'] || {})
+        # default_config = pg_settings
+
+        # Compatibility Note: legacy paginate logic NOT supported by J1 Paginator
+        # If the legacy paginate logic is configured then raise error
         if !site.config['paginate'].nil?
-          Jekyll.logger.info "J1 Paginator:","Legacy paginate configuration settings detected and will be used."
-          # You cannot run both the new code and the old code side by side
-          if !site.config['pagination'].nil?
-            err_msg = "The new j1-paginator and the old jekyll-paginate logic cannot both be configured in the site config at the same time. Please disable the old 'paginate:' config settings by either omitting the values or setting them to 'paginate:off'."
-            Jekyll.logger.error err_msg 
-            raise ArgumentError.new(err_msg)
-          end
-
-          default_config['per_page'] = site.config['paginate'].to_i
-          default_config['legacy_source'] = site.config['source']
-          if !site.config['paginate_path'].nil?
-            default_config['permalink'] = site.config['paginate_path'].to_s
-          end
-          # In case of legacy, enable pagination by default
-          default_config['enabled'] = true
-          default_config['legacy'] = true
+          Jekyll.logger.info "J1 Paginator:","legacy paginate configuration settings detected"
+          err_msg = "J1 Paginator does NOT support the old jekyll-paginate logic. Please disable legacy 'paginate:' config settings"
+          Jekyll.logger.error err_msg
+          raise ArgumentError.new(err_msg)
         end # Compatibility END (REMOVE AFTER 2018-01-01)
 
         # If disabled then simply quit
         if !default_config['enabled']
-          Jekyll.logger.info "J1 Paginator:","Disabled in site.config."
+          Jekyll.logger.info "J1 Paginator:","plugin disabled"
           return
         end
+
+        # Generate the AutoPages first
+        J1Paginator::AutoPages.create_autopages(site)
 
         # Handle deprecation of settings and features
         if( !default_config['title_suffix' ].nil? )
           Jekyll::Deprecator.deprecation_message "J1 Paginator: The 'title_suffix' configuration has been deprecated. Please use 'title'. See https://github.com/sverrirs/j1-paginator/blob/master/README-GENERATOR.md#site-configuration"
         end
 
-        Jekyll.logger.debug "J1 Paginator:","Starting"
+        Jekyll.logger.debug "J1 Paginator:","start processing ..."
 
         ################ 0 #################### 
         # Get all pages in the site (this will be used to find the pagination templates)
@@ -72,9 +63,11 @@ module Jekyll
         site_title = site.config['title']
 
         ################ 1 #################### 
-        # Specify the callback function that returns the correct docs/posts based on the collection name
-        # "posts" are just another collection in Jekyll but a specialized version that require timestamps
-        # This collection is the default and if the user doesn't specify a collection in their front-matter then that is the one we load
+        # Specify the callback function that returns the correct docs/posts
+        # based on the collection name "posts" are just another collection in
+        # Jekyll but a specialized version that require timestamps
+        # This collection is the default and if the user doesn't specify a
+        # collection in their front-matter then that is the one we load
         # If the collection is not found then empty array is returned
         collection_by_name_lambda = lambda do |collection_name|
           coll = []
@@ -101,7 +94,8 @@ module Jekyll
         # Create the proc that constructs the real-life site page
         # This is necessary to decouple the code from the Jekyll site object
         page_add_lambda = lambda do | newpage |
-          site.pages << newpage # Add the page to the site so that it is generated correctly
+          # Add the page to the site so that it is generated correctly
+          site.pages << newpage
           return newpage # Return the site to the calling code
         end
 
@@ -129,21 +123,11 @@ module Jekyll
         ################ 4 ####################
         # Now create and call the model with the real-life page creation proc and site data
         model = PaginationModel.new(logging_lambda, page_add_lambda, page_remove_lambda, collection_by_name_lambda)
-        if( default_config['legacy'] ) #(REMOVE AFTER 2018-01-01)
-          Jekyll.logger.warn "J1 Paginator:", "You are running jekyll-paginate backwards compatible pagination logic. Please ignore all earlier warnings displayed related to the old jekyll-paginate gem."
-          all_posts = site.site_payload['site']['posts'].reject { |post| post['hidden'] }
-          model.run_compatability(default_config, all_pages, site_title, all_posts) #(REMOVE AFTER 2018-01-01)
-        else
-          count = model.run(default_config, all_pages, site_title)
-          # jadams, 2020-04-05: Disable senseless empty line
-          # Jekyll.logger.info ""
-          Jekyll.logger.info "J1 Paginator:", "Complete, processed #{count} pagination page(s)"
-        end
+        count = model.run(default_config, all_pages, site_title)
+        # jadams, 2020-04-05: Disable senseless empty line
+        # Jekyll.logger.info ""
+        Jekyll.logger.info "J1 Paginator:", "finished, processed #{count} pagination page|s"
 
-      #rescue => ex
-      #  puts ex.backtrace
-      #  raise
-      #end
       end # function generate
     end # class PaginationGenerator
 
