@@ -2,11 +2,13 @@ module Jekyll
   module J1Paginator::Generator
 
     #
-    # This page handles the creation of the fake pagination pages based on the original page configuration
-    # The code does the same things as the default Jekyll/page.rb code but just forces the code to look
-    # into the template instead of the (currently non-existing) pagination page.
+    # This page handles the creation of the fake pagination pages based
+    # on the original page configuration. The code does the same things as
+    # the default Jekyll/page.rb code but just forces the code to look
+    # into the template instead of the (currently non-existing)
+    # pagination page.
     #
-    # This page exists purely in memory and is not read from disk
+    # NOTE: This page exists purely in memory and is not read from disk
     #
     class PaginationPage < Page
       attr_reader :relative_path
@@ -38,14 +40,16 @@ module Jekyll
         if !page_to_copy.data['autopage']
           self.content = page_to_copy.content
         else
-          # If the page is an auto page then migrate the necessary autopage info across into the
-          # new pagination page (so that users can get the correct keys etc)
+          # If the page is an auto page then migrate the necessary autopage
+          # info across into the new pagination page (so that users can get
+          # the correct keys etc)
           if( page_to_copy.data['autopage'].has_key?('display_name') )
             self.data['autopages'] = Jekyll::Utils.deep_merge_hashes( page_to_copy.data['autopage'], {} )
           end
         end
 
-        # Store the current page and total page numbers in the pagination_info construct
+        # Store the current page and total page numbers in the pagination_info
+        # construct
         self.data['pagination_info'] = {"curr_page" => cur_page_nr, 'total_pages' => total_pages }       
 
         # Perform some validation that is also performed in Jekyll::Page

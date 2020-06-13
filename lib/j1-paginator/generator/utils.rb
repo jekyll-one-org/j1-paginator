@@ -8,17 +8,17 @@ module Jekyll
     class Utils
 
       # Static: Calculate the number of pages.
+      #         all_posts - The Array of all Posts.
+      #         per_page  - The Integer of entries per page.
       #
-      # all_posts - The Array of all Posts.
-      # per_page  - The Integer of entries per page.
-      #
-      # Returns the Integer number of pages.
+      #         Returns the Integer number of pages.
       def self.calculate_number_of_pages(all_posts, per_page)
         (all_posts.size.to_f / per_page.to_i).ceil
       end
 
-      # Static: returns a fully formatted string with the current (:num) page number and maximum (:max) page count replaced if configured
-      #
+      # Static: returns a fully formatted string with the current (:num)
+      #         page number and maximum (:max) page count replaced if
+      #         configured
       def self.format_page_number(toFormat, cur_page_nr, total_page_count=nil)
         s = toFormat.sub(':num', cur_page_nr.to_s)
         if !total_page_count.nil?
@@ -27,8 +27,9 @@ module Jekyll
         return s
       end #function format_page_number
 
-      # Static: returns a fully formatted string with the :title variable and the current (:num) page number and maximum (:max) page count replaced
-      #
+      # Static: returns a fully formatted string with the :title variable
+      #         and the current (:num) page number and maximum (:max) page
+      #         count replaced
       def self.format_page_title(toFormat, title, cur_page_nr=nil, total_page_count=nil)
         return format_page_number(toFormat.sub(':title', title.to_s), cur_page_nr, total_page_count)
       end #function format_page_title
@@ -44,22 +45,17 @@ module Jekyll
         path[0..0] == "." ? path : ".#{path}"
       end
       
-      # Static: Return a String version of the input which has a leading slash.
-      #         If the input already has a forward slash in position zero, it will be
-      #         returned unchanged.
-      #
-      # path - a String path
-      #
-      # Returns the path with a leading slash
+      # Static: Return a String (path - a String path) version of the input
+      #         which has a leading slash. If the input already has a forward
+      #         slash in position zero, it will be returned unchanged.
+      #         Returns the path with a leading slash
       def self.ensure_leading_slash(path)
         path[0..0] == "/" ? path : "/#{path}"
       end
 
       # Static: Return a String version of the input without a leading slash.
-      #
-      # path - a String path
-      #
-      # Returns the input without the leading slash
+      #         path - a String path
+      #         Returns the input without the leading slash
       def self.remove_leading_slash(path)
         path[0..0] == "/" ? path[1..-1] : path
       end
@@ -68,17 +64,14 @@ module Jekyll
       #         If the input already has a forward slash at the end, it will be
       #         returned unchanged.
       #
-      # path - a String path
-      #
-      # Returns the path with a trailing slash
+      #         path - a String path
+      #         Returns the path with a trailing slash
       def self.ensure_trailing_slash(path)
         path[-1] == "/" ? path : "#{path}/"
       end
 
-      #
       # Sorting routine used for ordering posts by custom fields.
       # Handles Strings separately as we want a case-insenstive sorting
-      #
       def self.sort_values(a, b)
         if a.nil? && !b.nil?
           return -1
@@ -99,7 +92,8 @@ module Jekyll
       end
 
       # Retrieves the given sort field from the given post
-      # the sort_field variable can be a hierarchical value on the form "parent_field:child_field" repeated as many times as needed
+      # the sort_field variable can be a hierarchical value of the form
+      # "parent_field:child_field" repeated as many times as needed
       # only the leaf child_field will be retrieved  
       def self.sort_get_post_data(post_data, sort_field)
         
@@ -108,7 +102,8 @@ module Jekyll
         sort_value = post_data
 
         sort_split.each do |r_key|
-          key = r_key.downcase.strip # Remove any erronious whitespace and convert to lower case
+          # Remove any erroneous whitespace and convert to lower case
+          key = r_key.downcase.strip
           if !sort_value.has_key?(key)
             return nil
           end

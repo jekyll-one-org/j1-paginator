@@ -1,9 +1,7 @@
 module Jekyll
   module J1Paginator::Generator
-    
-    #
+
     # Handles the preparation of all the posts based on the current page index
-    #
     class Paginator
       attr_reader :page, :per_page, :posts, :total_posts, :total_pages,
         :previous_page, :previous_page_path, :next_page, :next_page_path, :page_path, :page_trail,
@@ -14,7 +12,6 @@ module Jekyll
       end
       
       # Initialize a new Paginator.
-      #
       def initialize(config_per_page, first_index_page_url, paginated_page_url, posts, cur_page_nr, num_pages, default_indexpage, default_ext)
         @page = cur_page_nr
         @per_page = config_per_page.to_i
@@ -32,8 +29,9 @@ module Jekyll
                                                !default_indexpage || default_indexpage.length == 0 ? 'index' : default_indexpage,
                                                !default_ext || default_ext.length == 0 ? '.html' : default_ext)
         
-        # To support customizable pagination pages we attempt to explicitly append the page name to 
-        # the url incase the user is using extensionless permalinks. 
+        # To support customizable pagination pages we attempt to explicitly
+        # append the page name to the url incase the user is using extensionless
+        # permalinks.
         if default_indexpage && default_indexpage.length > 0
           # Adjust first page url
           first_index_page_url = Utils.ensure_full_path(first_index_page_url, default_indexpage, default_ext)
@@ -59,7 +57,6 @@ module Jekyll
       end
 
       # Convert this Paginator's data to a Hash suitable for use by Liquid.
-      #
       # Returns the Hash representation of this Paginator.
       def to_liquid
         {

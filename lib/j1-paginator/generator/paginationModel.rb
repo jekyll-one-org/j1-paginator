@@ -245,7 +245,8 @@ module Jekyll
         using_posts = PaginationIndexer.read_config_value_and_filter_posts(config, 'locale', using_posts, all_locales)
         self._debug_print_filtering_info('Locale', before, using_posts.size)
         
-        # Apply sorting to the posts if configured, any field for the post is available for sorting
+        # Apply sorting to the posts if configured, any field for the post
+        # is available for sorting
         if config['sort_field']
           sort_field = config['sort_field'].to_s
 
@@ -287,7 +288,8 @@ module Jekyll
         # per page value
         total_pages = Utils.calculate_number_of_pages(using_posts, config['per_page'])
         
-        # If a upper limit is set on the number of total pagination pages then impose that now
+        # If a upper limit is set on the number of total pagination pages
+        # then impose that now
         if config['limit'] && config['limit'].to_i > 0 && config['limit'].to_i < total_pages
           total_pages = config['limit'].to_i
         end

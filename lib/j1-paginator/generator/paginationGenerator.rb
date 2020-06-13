@@ -20,7 +20,8 @@ module Jekyll
       # Returns nothing.
       def generate(site)
 
-        # Retrieve and merge the pagination configuration from the plugin yml file
+        # Retrieve and merge the pagination configuration from the
+        # plugin yml file
         pg_config_defaults = site.data['plugins']['defaults']['paginator']
         pg_config_settings = site.data['plugins']['paginator']
         pg_settings = Jekyll::Utils.deep_merge_hashes(pg_config_defaults, pg_config_settings || {})
@@ -30,8 +31,9 @@ module Jekyll
         default_config = Jekyll::Utils.deep_merge_hashes(DEFAULT, pg_settings['settings']['pagination'] || {})
         # default_config = pg_settings
 
-        # Compatibility Note: legacy paginate logic NOT supported by J1 Paginator
-        # If the legacy paginate logic is configured then raise error
+        # Compatibility Note: legacy paginate logic NOT supported by
+        # J1 Paginator. If the legacy paginate logic is configured then
+        # raise error
         if !site.config['paginate'].nil?
           Jekyll.logger.info "J1 Paginator:","legacy paginate configuration settings detected"
           err_msg = "J1 Paginator does NOT support the old jekyll-paginate logic. Please disable legacy 'paginate:' config settings"
@@ -53,7 +55,7 @@ module Jekyll
           Jekyll::Deprecator.deprecation_message "J1 Paginator: The 'title_suffix' configuration has been deprecated. Please use 'title'. See https://github.com/sverrirs/j1-paginator/blob/master/README-GENERATOR.md#site-configuration"
         end
 
-        Jekyll.logger.debug "J1 Paginator:","start processing ..."
+        Jekyll.logger.info "J1 Paginator:","pagination enabled, start processing ..."
 
         ################ 0 #################### 
         # Get all pages in the site (this will be used to find the pagination templates)
@@ -62,7 +64,9 @@ module Jekyll
         # Get the default title of the site (used as backup when there is no title available for pagination)
         site_title = site.config['title']
 
-        ################ 1 #################### 
+        #  lambda (callback functions)
+        # ----------------------------------------------------------------------
+
         # Specify the callback function that returns the correct docs/posts
         # based on the collection name "posts" are just another collection in
         # Jekyll but a specialized version that require timestamps
@@ -90,7 +94,6 @@ module Jekyll
           return coll
         end
 
-        ################ 2 ####################
         # Create the proc that constructs the real-life site page
         # This is necessary to decouple the code from the Jekyll site object
         page_add_lambda = lambda do | newpage |
@@ -99,13 +102,11 @@ module Jekyll
           return newpage # Return the site to the calling code
         end
 
-        ################ 2.5 ####################
         # lambda that removes a page from the site pages list
         page_remove_lambda = lambda do | page_to_remove |
           site.pages.delete_if {|page| page == page_to_remove } 
         end
 
-        ################ 3 ####################
         # Create a proc that will delegate logging
         # Decoupling Jekyll specific logging
         logging_lambda = lambda do | message, type="info" |
@@ -120,12 +121,10 @@ module Jekyll
           end
         end
 
-        ################ 4 ####################
-        # Now create and call the model with the real-life page creation proc and site data
+        # Create and call the model with the real-life page creation
+        # proc and site data
         model = PaginationModel.new(logging_lambda, page_add_lambda, page_remove_lambda, collection_by_name_lambda)
         count = model.run(default_config, all_pages, site_title)
-        # jadams, 2020-04-05: Disable senseless empty line
-        # Jekyll.logger.info ""
         Jekyll.logger.info "J1 Paginator:", "finished, processed #{count} pagination page|s"
 
       end # function generate
