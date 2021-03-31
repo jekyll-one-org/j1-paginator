@@ -45,7 +45,7 @@ module Jekyll
             @debug = template_config['debug']
 
             self._debug_print_config_info(template_config, template.path)
-            
+
             # Only paginate the template if it is explicitly enabled
             # This makes the logic simpler by avoiding the need to determine
             # which index pages were generated automatically and which weren't
@@ -139,7 +139,7 @@ module Jekyll
       def _fix_deprecated_config_features(config)
         keys_to_delete = []
 
-        # As of v1.5.1 the title_suffix is deprecated and 'title' should be used 
+        # As of v1.5.1 the title_suffix is deprecated and 'title' should be used
         # but only if title has not been defined already!
         if( !config['title_suffix'].nil? )
           if( config['title'].nil? )
@@ -203,7 +203,7 @@ module Jekyll
         before_count = before_count.to_s.rjust(3)
         _debug_log "  Filtering by #{filter_name}", "#{before_count} => #{after_count}"
       end
-      
+
       #
       # Rolls through all the pages passed in and finds all pages that have
       # pagination enabled on them. These pages will be used as templates
@@ -221,7 +221,7 @@ module Jekyll
         end
         return candidates
       end # function discover_paginate_templates
-            
+
       # Paginates the blog's posts. Renders the index.html file into paginated
       # directories, e.g.: page2/index.html, page3/index.html, etc and adds more
       # site-wide data.
@@ -233,7 +233,7 @@ module Jekyll
       def paginate(template, config, site_title, all_posts, all_tags, all_categories, all_locales)
         # By default paginate on all posts in the site
         using_posts = all_posts
-        
+
         # Now start filtering out any posts that the user doesn't want included in the pagination
         before = using_posts.size
         using_posts = PaginationIndexer.read_config_value_and_filter_posts(config, 'category', using_posts, all_categories)
@@ -244,7 +244,7 @@ module Jekyll
         before = using_posts.size
         using_posts = PaginationIndexer.read_config_value_and_filter_posts(config, 'locale', using_posts, all_locales)
         self._debug_print_filtering_info('Locale', before, using_posts.size)
-        
+
         # Apply sorting to the posts if configured, any field for the post
         # is available for sorting
         if config['sort_field']
@@ -283,11 +283,11 @@ module Jekyll
             using_posts.reverse!
           end
         end
-               
+
         # Calculate the max number of pagination-pages based on the configured
         # per page value
         total_pages = Utils.calculate_number_of_pages(using_posts, config['per_page'])
-        
+
         # If a upper limit is set on the number of total pagination pages
         # then impose that now
         if config['limit'] && config['limit'].to_i > 0 && config['limit'].to_i < total_pages
@@ -296,7 +296,7 @@ module Jekyll
 
         #### BEFORE STARTING REMOVE THE TEMPLATE PAGE FROM THE SITE LIST!
         @page_remove_lambda.call( template )
-        
+
         # list of all newly created pages
         newpages = []
 
@@ -321,7 +321,7 @@ module Jekyll
           # construct the title, set all page.data values needed
           first_index_page_url = Utils.validate_url(template)
           paginated_page_url   = File.join(first_index_page_url, config['permalink'])
-          
+
           # 3. Create the pager logic for this page, pass in the prev and
           # next page numbers, assign pager to in-memory page
           newpage.pager = Paginator.new( config['per_page'], first_index_page_url, paginated_page_url, using_posts, cur_page_nr, total_pages, indexPageName, indexPageExt)
@@ -344,11 +344,16 @@ module Jekyll
           end
 
           # Transfer the title across to the new page
+          # jadams, 2021-03-31: control from here if page titles gets NUMBERED
+          # TODO: make NUMBERING fully configurable !!!
+          #
           tmp_title = template.data['title'] || site_title
           if cur_page_nr > 1 && config.has_key?('title')
             # If the user specified a title suffix to be added then let's
             # add that to all the pages except the first
-            newpage.data['title'] = "#{Utils.format_page_title(config['title'], tmp_title, cur_page_nr, total_pages)}"
+            # DISABLE ugly page numbering
+            # newpage.data['title'] = "#{Utils.format_page_title(config['title'], tmp_title, cur_page_nr, total_pages)}"
+            newpage.data['title'] = tmp_title
           else
             newpage.data['title'] = tmp_title
           end
@@ -359,7 +364,7 @@ module Jekyll
           if cur_page_nr > 1
             newpage.data['autogen'] = "j1-paginator"
           end
-          
+
           # Add the page to the site
           @page_add_lambda.call( newpage )
 
@@ -388,7 +393,7 @@ module Jekyll
               if( idx_end - idx_start < trail_length )
                 # Attempt to pad the beginning if we have enough pages
                 idx_start = [idx_start - ( trail_length - (idx_end - idx_start) ), 0].max # Never go beyond the zero index
-              end              
+              end
 
               # Convert the newpages array into a two dimensional array
               # that has [index, page_url] as items

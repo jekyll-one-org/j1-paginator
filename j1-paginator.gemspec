@@ -25,8 +25,8 @@ Gem::Specification.new do |spec|
   # Gem requires Jekyll to work
   # ~> is the pessimistic operator and is equivalent to '>= 3.0', '< 4.0'
   # spec.add_runtime_dependency "jekyll", '>= 3.0', '<= 4.0
-  spec.add_runtime_dependency "jekyll", "~> 3.0"
-
+  # spec.add_runtime_dependency "jekyll", '> 3.0'
+  spec.add_runtime_dependency 'jekyll', '>= 3.6', '< 5.0'
 
   # Development requires more
   spec.add_development_dependency "bundler", "~> 2.0"
