@@ -326,6 +326,26 @@ module Jekyll
           # next page numbers, assign pager to in-memory page
           newpage.pager = Paginator.new( config['per_page'], first_index_page_url, paginated_page_url, using_posts, cur_page_nr, total_pages, indexPageName, indexPageExt)
 
+          # Disabled for now
+          if cur_page_nr > 10000000000000
+            pagination_path = newpage.instance_variable_get(:@site).instance_variable_get(:@dest)
+            last_pagination_page = newpage.instance_variable_get(:@pager).instance_variable_get(:@last_page_path)
+            last_pagination_file = pagination_path + last_pagination_page
+
+            if config['rebuild'] == false
+              if File.exist?(last_pagination_file)
+                Jekyll.logger.info 'J1 Paginator:', 'recreate pagination pages disabled.'
+                #
+                # TODO: Keep the existing pager file|s from being cleaned by Jekyll
+                #
+                # Add the page to the site
+                @page_add_lambda.call( newpage )
+                newpages << newpage
+                return
+              end
+            end
+          end
+
           # Create the url for the new page, make sure we prepend any
           # permalinks that are defined in the template page before
           pager_path = newpage.pager.page_path
@@ -344,16 +364,12 @@ module Jekyll
           end
 
           # Transfer the title across to the new page
-          # jadams, 2021-03-31: control from here if page titles gets NUMBERED
-          # TODO: make NUMBERING fully configurable !!!
           #
           tmp_title = template.data['title'] || site_title
           if cur_page_nr > 1 && config.has_key?('title')
             # If the user specified a title suffix to be added then let's
             # add that to all the pages except the first
-            # DISABLE ugly page numbering
-            # newpage.data['title'] = "#{Utils.format_page_title(config['title'], tmp_title, cur_page_nr, total_pages)}"
-            newpage.data['title'] = tmp_title
+            newpage.data['title'] = "#{Utils.format_page_title(config['title'], tmp_title, cur_page_nr, total_pages)}"
           else
             newpage.data['title'] = tmp_title
           end
@@ -406,7 +422,7 @@ module Jekyll
 
       end # function paginate
 
-    end # class PaginationV2
+    end # class PaginationModel
 
   end # module J1Paginator
 end # module Jekyll

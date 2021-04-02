@@ -18,3 +18,6 @@
 #
 #   git tag -a v2021.1.0 -m "v2021.1.0"
 #   git push origin --tags
+
+git rm -r --cached . && git add .
+git commit -am "New version 2021.1.0"
