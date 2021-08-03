@@ -12,7 +12,7 @@ module Jekyll
       pg_settings = Jekyll::Utils.deep_merge_hashes(pg_config_defaults, pg_config_settings || {})
 
       # Get the configuration for auto pages
-      ap_config_defaults = pg_config_defaults['settings']['autopages']
+      ap_config_defaults = pg_config_defaults['defaults']['autopages']
       ap_config_settings = pg_config_settings['settings']['autopages']
       ap_settings = Jekyll::Utils.deep_merge_hashes(ap_config_defaults, ap_config_settings || {})
 
@@ -21,7 +21,7 @@ module Jekyll
 
 
       # Get the configuration for the paginator
-      pg_config_defaults = pg_config_defaults['settings']['pagination']
+      pg_config_defaults = pg_config_defaults['defaults']['pagination']
       pg_config_settings = pg_config_settings['settings']['pagination']
       pg_settings = Jekyll::Utils.deep_merge_hashes(pg_config_defaults, pg_config_settings || {})
 
@@ -49,7 +49,7 @@ module Jekyll
         site.pages << TagAutoPage.new(site, site.dest, autopage_tag_config, pagination_config, layout_name, tag, tag_original_name)
       end
       autopage_create(autopage_config, pagination_config, posts_to_use, 'tags', 'tags', createtagpage_lambda) # Call the actual function
-      
+
 
       ###############################################
       # Generate the category pages if enabled
@@ -57,14 +57,14 @@ module Jekyll
         site.pages << CategoryAutoPage.new(site, site.dest, autopage_cat_config, pagination_config, layout_name, category, category_original_name)
       end
       autopage_create(autopage_config, pagination_config,posts_to_use, 'categories', 'categories', createcatpage_lambda) # Call the actual function
-      
+
       ###############################################
       # Generate the Collection pages if enabled
       createcolpage_lambda = lambda do | autopage_col_config, pagination_config, layout_name, coll_name, coll_original_name |
         site.pages << CollectionAutoPage.new(site, site.dest, autopage_col_config, pagination_config, layout_name, coll_name, coll_original_name)
       end
       autopage_create(autopage_config, pagination_config,posts_to_use, 'collections', '__coll', createcolpage_lambda) # Call the actual function
-    
+
     end # create_autopages
 
     # STATIC: this function actually performs the steps to generate the autopages.

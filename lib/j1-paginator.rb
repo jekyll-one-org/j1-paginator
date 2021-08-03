@@ -1,8 +1,9 @@
-# Jekyll::Paginate V2 is a gem built for Jekyll 3 that generates pagiatation for posts, collections, categories and tags.
-# 
-# It is based on https://github.com/jekyll/jekyll-paginate, the original Jekyll paginator
-# which was decommissioned in Jekyll 3 release onwards. This code is currently not officially
-# supported on Jekyll versions < 3.0 (although it might work)
+# Jekyll::Paginate V2 is a gem built for Jekyll 4+ that generates
+# pagiatation for posts, collections, categories and tags.
+#
+# It is based on https://github.com/jekyll/jekyll-paginate, the original
+# Jekyll paginator which was decommissioned in Jekyll 3 release onwards.
+# This code is currently not officially supported on Jekyll versions >= 3.0.
 #
 # Author: Sverrir Sigmundarson
 # Site: https://github.com/sverrirs/j1-paginator
@@ -28,7 +29,7 @@ require "j1-paginator/autopages/pages/categoryAutoPage"
 require "j1-paginator/autopages/pages/collectionAutoPage"
 require "j1-paginator/autopages/pages/tagAutoPage"
 
-module Jekyll 
+module Jekyll
   module J1Paginator
   end # module J1Paginator
 end # module Jekyll
