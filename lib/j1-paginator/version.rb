@@ -1,5 +1,5 @@
 module Jekyll
   module J1Paginator
-    VERSION = '2021.1.1'
+    VERSION = '2022.1.0'
   end
 end

@@ -1,19 +1,19 @@
 module Jekyll
   module J1Paginator::Generator
-  
+
     #
     # The main entry point into the generator, called by Jekyll
-    # this function extracts all the necessary information from the jekyll end and passes it into the pagination 
+    # this function extracts all the necessary information from the jekyll end and passes it into the pagination
     # logic. Additionally it also contains all site specific actions that the pagination logic needs access to
     # (such as how to create new pages)
-    # 
+    #
     class PaginationGenerator < Generator
       # This generator is safe from arbitrary code execution.
       safe true
 
       # This generator should be passive with regard to its execution
       priority :lowest
-      
+
       # Generate paginated pages if necessary (Default entry point)
       # site - The Site.
       #
@@ -43,8 +43,10 @@ module Jekyll
 
         # If disabled then simply quit
         if !default_config['enabled']
-          Jekyll.logger.info "J1 Paginator:","plugin disabled"
+          Jekyll.logger.info "J1 Paginator:","disabled"
           return
+        else
+          Jekyll.logger.info "J1 Paginator:","enabled"
         end
 
         # Generate the AutoPages first
@@ -55,9 +57,10 @@ module Jekyll
           Jekyll::Deprecator.deprecation_message "J1 Paginator: The 'title_suffix' configuration has been deprecated. Please use 'title'. See https://github.com/sverrirs/j1-paginator/blob/master/README-GENERATOR.md#site-configuration"
         end
 
-        Jekyll.logger.info "J1 Paginator:","pagination enabled, start processing ..."
+        Jekyll.logger.info "J1 Paginator:","generate paginator pages: enabled"
+#       Jekyll.logger.info "J1 Paginator:","generate paginator pages: start processing ..."
 
-        ################ 0 #################### 
+        ################ 0 ####################
         # Get all pages in the site (this will be used to find the pagination templates)
         all_pages = site.pages
 
@@ -104,7 +107,7 @@ module Jekyll
 
         # lambda that removes a page from the site pages list
         page_remove_lambda = lambda do | page_to_remove |
-          site.pages.delete_if {|page| page == page_to_remove } 
+          site.pages.delete_if {|page| page == page_to_remove }
         end
 
         # Create a proc that will delegate logging
@@ -125,7 +128,8 @@ module Jekyll
         # proc and site data
         model = PaginationModel.new(logging_lambda, page_add_lambda, page_remove_lambda, collection_by_name_lambda)
         count = model.run(default_config, all_pages, site_title)
-        Jekyll.logger.info "J1 Paginator:", "finished, processed #{count} pagination page|s"
+        Jekyll.logger.info "J1 Paginator:", "generate paginator pages: #{count} page|s generated"
+#       Jekyll.logger.info "J1 Paginator:", "generate paginator pages: finished"
 
       end # function generate
     end # class PaginationGenerator

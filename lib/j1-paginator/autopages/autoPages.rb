@@ -30,7 +30,7 @@ module Jekyll
 
       # If disabled then don't do anything
       if !autopage_config['enabled'] || autopage_config['enabled'].nil?
-        Jekyll.logger.info "J1 Paginator:","autopages, disabled|not configured"
+        Jekyll.logger.info "J1 Paginator:", "generate auto pages: disabled"
         return
       end
 
@@ -91,7 +91,7 @@ module Jekyll
             end
           end
         else
-          Jekyll.logger.info "J1 Paginator:","autopages, #{configkey_name} pages are disabled|not configured"
+          Jekyll.logger.info "J1 Paginator:","autopages, #{configkey_name} pages are disabled"
         end
       end
     end
