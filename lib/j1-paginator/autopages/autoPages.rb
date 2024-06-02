@@ -56,7 +56,7 @@ module Jekyll
       createcatpage_lambda = lambda do | autopage_cat_config, pagination_config, layout_name, category, category_original_name |
         site.pages << CategoryAutoPage.new(site, site.dest, autopage_cat_config, pagination_config, layout_name, category, category_original_name)
       end
-      autopage_create(autopage_config, pagination_config,posts_to_use, 'categories', 'categories', createcatpage_lambda) # Call the actual function
+      autopage_create(autopage_config, pagination_config, posts_to_use, 'categories', 'categories', createcatpage_lambda) # Call the actual function
 
       ###############################################
       # Generate the Collection pages if enabled
