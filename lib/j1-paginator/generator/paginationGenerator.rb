@@ -128,7 +128,7 @@ module Jekyll
         # proc and site data
         model = PaginationModel.new(logging_lambda, page_add_lambda, page_remove_lambda, collection_by_name_lambda)
         count = model.run(default_config, all_pages, site_title)
-        Jekyll.logger.info "J1 Paginator:", "generate paginator pages: #{count} templates|s used"
+        Jekyll.logger.info "J1 Paginator:", "generate paginator pages: #{count} template|s used"
 #       Jekyll.logger.info "J1 Paginator:", "generate paginator pages: finished"
 
       end # function generate
